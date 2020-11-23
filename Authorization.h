@@ -10,6 +10,8 @@
 #include <exception>
 
 class Authorization {
+    bool loggedIn = false;
+    std::shared_ptr<User> user = nullptr;
 public:
     const User *getUser() const;
 
@@ -18,8 +20,4 @@ public:
     void logout();
 
     void registration(const Credentials &credentials, DB &db);
-
-    bool loggedIn = false;
-    std::shared_ptr<User> user = nullptr;
-private:
 };

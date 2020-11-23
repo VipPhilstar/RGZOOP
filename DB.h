@@ -14,6 +14,9 @@
 #include "Credentials.h"
 
 class DB {
+    std::vector<std::shared_ptr<User>> users;
+    std::vector<User> records;
+    std::vector<User> comments;
 public:
     void insertUser(std::shared_ptr<User> &user);
 
@@ -28,9 +31,4 @@ public:
     void updateUser(const std::string &id, const std::function<void(User &)> &transformation);
 
     void deleteUser(const std::string &id);
-
-private:
-    std::vector<std::shared_ptr<User>> users;
-    std::vector<User> records;
-    std::vector<User> comments;
 };

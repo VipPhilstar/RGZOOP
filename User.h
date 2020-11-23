@@ -10,6 +10,14 @@
 #include "Credentials.h"
 
 class User {
+    std::string id;
+    std::string nickname;
+    std::string password;
+    std::string interests = "";
+    std::string mail = "";
+    std::string phone = "";
+    std::string birthday = "";
+    std::string info = "";
 public:
     explicit User(const Credentials &c, std::string interests = "", std::string mail = "", std::string phone = "",
                   std::string birthday = "",
@@ -25,12 +33,4 @@ public:
 
     void initId();
 
-    std::string id;
-    std::string nickname;
-    std::string password;
-    std::string interests = "";
-    std::string mail = "";
-    std::string phone = "";
-    std::string birthday = "";
-    std::string info = "";
 };
