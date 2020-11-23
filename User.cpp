@@ -13,7 +13,7 @@ const std::string &User::getId() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const User &user) {
-    os << "\n\tnickname: " << user.nickname << "\n\tid: " << user.id;
+    os << "\n\tnickname: " << user.nickname << ";\tid: " << user.id;
     return os;
 }
 
@@ -25,13 +25,9 @@ void User::initId() {
     this->id = std::to_string(random());
 }
 
-User::User(const Credentials &c, std::string &interests, std::string &mail, std::string &phone, std::string &birthday,
-           std::string &info) : nickname(c.nickname), password(c.password), interests(interests), mail(mail),
-                                phone(phone), birthday(birthday), info(info) {
+User::User(const Credentials &c, std::string interests, std::string mail, std::string phone, std::string birthday,
+           std::string info) : nickname(c.nickname), password(c.password), interests(std::move(interests)),
+                               mail(std::move(mail)),
+                               phone(std::move(phone)), birthday(std::move(birthday)), info(std::move(info)) {
     this->initId();
 }
-
-User::User(const Credentials &credentials) : nickname(credentials.nickname), password(credentials.password) {
-    this->initId();
-}
-

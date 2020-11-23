@@ -5,17 +5,15 @@
 #pragma once
 
 #include <string>
-#include <chrono>
 #include <iostream>
-#include <algorithm>
+#include <utility>
 #include "Credentials.h"
 
 class User {
 public:
-    User(const Credentials &c, std::string &interests, std::string &mail, std::string &phone, std::string &birthday,
-         std::string &info);
-
-    explicit User(const Credentials &credentials);
+    explicit User(const Credentials &c, std::string interests = "", std::string mail = "", std::string phone = "",
+                  std::string birthday = "",
+                  std::string info = "");
 
     const std::string &getNickname() const;
 

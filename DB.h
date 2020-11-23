@@ -15,20 +15,22 @@
 
 class DB {
 public:
-    void insertUser(const User &user);
+    void insertUser(std::shared_ptr<User> &user);
 
-    User *findUserByNickname(const std::string &nickname);
+    std::shared_ptr<User> findUserByNickname(const std::string &nickname);
 
-    User *findUserByCredentials(const Credentials &credentials);
+    std::shared_ptr<User> findUserByCredentials(const Credentials &credentials);
 
-    User *findUserById(const std::string &id);
+    std::shared_ptr<User> findUserById(const std::string &id);
+
+    std::vector<std::shared_ptr<User>> getUsers(int skip = 0, int limit = 10) const;
 
     void updateUser(const std::string &id, const std::function<void(User &)> &transformation);
 
     void deleteUser(const std::string &id);
 
 private:
-    std::vector<User> users;
+    std::vector<std::shared_ptr<User>> users;
     std::vector<User> records;
     std::vector<User> comments;
 };

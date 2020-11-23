@@ -10,12 +10,18 @@
 
 using namespace std;
 
-void getCurrentUser(Authorization &auth) {
+void printCurrentUser(Authorization &auth) {
     try {
         const User *user = auth.getUser();
         cout << "user> " << *user << endl;
     } catch (const exception &ex) {
         cout << "status> " << ex.what() << endl;
+    }
+}
+
+void printUsers(const vector<shared_ptr<User>> &users) {
+    for (auto &user: users) {
+        cout << *user << endl;
     }
 }
 
@@ -25,8 +31,15 @@ int main() {
     Authorization auth;
 
     try {
-        auth.registeration({"Phil", "pass"}, db);
-        getCurrentUser(auth);
+        auth.registration({"Phil", "password"}, db);
+        auth.logout();
+        auth.registration({"Bob", "password"}, db);
+        auth.logout();
+        auth.registration({"Den", "password"}, db);
+        auth.logout();
+//        printCurrentUser(auth);
+        auto users = db.getUsers(0, 3);
+        printUsers(users);
     } catch (const exception &ex) {
         cout << ex.what() << endl;
     }
