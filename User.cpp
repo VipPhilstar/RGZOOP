@@ -15,11 +15,11 @@ const std::string &User::getId() const {
 }
 
 std::vector<std::shared_ptr<Record>> User::getRecords(int skip, int limit) const {
-    if (records.size() < skip + limit) {
+    if (records.size() < skip) {
         throw std::logic_error("Limit is wrong");
     }
     auto start = records.begin() + skip;
-    auto end = start + limit;
+    auto end = records.size() < skip + limit ? records.end() : start + limit;
     return std::vector<std::shared_ptr<Record>>(start, end);
 }
 

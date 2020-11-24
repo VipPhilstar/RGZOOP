@@ -64,11 +64,11 @@ void DB::deleteUser(const std::string &id) {
 }
 
 std::vector<std::shared_ptr<User>> DB::getUsers(int skip, int limit) const {
-    if (users.size() < skip + limit) {
+    if (users.size() < skip) {
         throw std::logic_error("Limit is wrong");
     }
     auto start = users.begin() + skip;
-    auto end = start + limit;
+    auto end = users.size() < skip + limit ? users.end() : start + limit;
     return std::vector<std::shared_ptr<User>>(start, end);
 }
 
