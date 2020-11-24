@@ -15,6 +15,10 @@ class Record {
 public:
     bool isCommentsAllowed() const;
 
+    void setTitle(const std::string &title);
+
+    void setCommentsAllowed(bool commentsAllowed);
+
     explicit Record(std::string title);
 
     friend std::ostream &operator<<(std::ostream &os, const Record &record);

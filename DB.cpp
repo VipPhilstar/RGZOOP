@@ -57,6 +57,15 @@ void DB::updateUser(const std::string &id, const std::function<void(User &)> &tr
     }
 }
 
+void DB::updateRecord(const std::string &id, const std::function<void(Record &)> &transformation) {
+    try {
+        auto recordToUpdate = findRecordById(id);
+        transformation(*recordToUpdate);
+    } catch (const std::exception &ex) {
+        throw ex;
+    }
+}
+
 void DB::deleteUser(const std::string &id) {
     auto it = users.erase(std::remove_if(users.begin(), users.end(),
                                          [&id](std::shared_ptr<User> &user) { return user->getId() == id; }),

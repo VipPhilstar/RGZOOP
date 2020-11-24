@@ -37,7 +37,7 @@ public:
 
     void updateUser(const std::string &id, const std::function<void(User &)> &transformation);
 
-    void updateRecord(const std::string &id, const std::function<void(User &)> &transformation);
+    void updateRecord(const std::string &id, const std::function<void(Record &)> &transformation);
 
     void deleteUser(const std::string &id);
 };

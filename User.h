@@ -39,6 +39,8 @@ public:
 
     void addRecord(const Record &record);
 
+    void changeCanCommentRecord(const std::string &id, bool newValue);
+
     bool checkCredentials(const Credentials &credentials) const;
 
     friend std::ostream &operator<<(std::ostream &os, const User &user);

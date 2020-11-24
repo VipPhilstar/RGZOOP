@@ -17,7 +17,15 @@ Record::Record(std::string title) : title(std::move(title)) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Record &record) {
-    os << "title: " << record.id << "; id: " << record.id;
+    os << "title: " << record.title << "; id: " << record.id<< "; canComment: " << record.commentsAllowed;
     return os;
+}
+
+void Record::setTitle(const std::string &title) {
+    this->title = title;
+}
+
+void Record::setCommentsAllowed(bool commentsAllowed) {
+    this->commentsAllowed = commentsAllowed;
 }
 
