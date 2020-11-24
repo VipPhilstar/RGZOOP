@@ -20,7 +20,7 @@ void Authorization::registration(const Credentials &credentials) {
     try {
         std::shared_ptr<User> existingUser = db.findUserByNickname(credentials.nickname);
         throw std::logic_error("User already exists!");
-    } catch (const std::exception &ex) {}
+    } catch (const std::logic_error &ex) {}
     auto tempUser = std::make_shared<User>(credentials);
     this->user = tempUser;
     this->loggedIn = true;
@@ -35,7 +35,7 @@ void Authorization::login(const Credentials &credentials) {
         std::shared_ptr<User> tempUser = db.findUserByCredentials(credentials);
         this->user = tempUser;
         this->loggedIn = true;
-    } catch (const std::exception &ex) {
+    } catch (const std::logic_error &ex) {
         throw std::logic_error("Invalid login or password!");
     }
 }

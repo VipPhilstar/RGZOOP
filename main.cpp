@@ -9,6 +9,7 @@
 #include "Authorization.h"
 
 using namespace std;
+DB db;
 
 void printCurrentUser(Authorization &auth) {
     try {
@@ -31,13 +32,25 @@ void printRecords(const vector<shared_ptr<Record>> &records) {
     }
 }
 
+void printComments(const vector<shared_ptr<Comment>> &comments) {
+    for (auto &comment: comments) {
+        cout << "comment> " << *comment << endl;
+    }
+}
+
 string addRecord(const string &title, const Authorization &auth) {
     Record tempRecord(title);
     auth.getUser()->addRecord(tempRecord);
     return tempRecord.getId();
 }
 
-DB db;
+string addComment(const string &title, const string &id) {
+    Comment tempComment(title);
+    auto record = db.findRecordById(id);
+    record->addComment(tempComment);
+    return tempComment.getId();
+}
+
 
 int main() {
     setlocale(LC_ALL, "rus");
@@ -49,14 +62,21 @@ int main() {
         addRecord("R1", auth);
         addRecord("R2", auth);
         string rId = addRecord("R3", auth);
+        addComment("C1", rId);
         auth.getUser()->changeCanCommentRecord(rId, false);
-        auto records = auth.getUser()->getRecords(0, 10);
-        printRecords(records);
-//        printCurrentUser(auth);
-        auto users = db.getUsers(0, 10);
-        printUsers(users);
+        try {
+            addComment("C2", rId);
+            addComment("C3", rId);
+        } catch (const logic_error &ex) {
+            cout << ex.what() << endl;
+        }
+        auto record = db.findRecordById(rId);
+        printComments(db.getComments(rId, 0, 10));
+
+//        auto records = auth.getUser()->getRecords(0, 10);
+//        printRecords(records);
     } catch (const exception &ex) {
-        cout << ex.what() << endl;
+        cout << "error> " << ex.what() << endl;
     }
     return 0;
 }

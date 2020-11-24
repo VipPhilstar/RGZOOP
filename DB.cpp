@@ -12,6 +12,10 @@ void DB::insertRecord(std::shared_ptr<Record> &record) {
     records.push_back(record);
 }
 
+void DB::insertComment(std::shared_ptr<Comment> &comment) {
+    comments.push_back(comment);
+}
+
 std::shared_ptr<User> DB::findUserByNickname(const std::string &nickname) {
     auto it = std::find_if(users.begin(), users.end(),
                            [&nickname](std::shared_ptr<User> &user) { return user->getNickname() == nickname; });
@@ -39,6 +43,15 @@ std::shared_ptr<Record> DB::findRecordById(const std::string &id) {
     return (*it);
 }
 
+std::shared_ptr<Comment> DB::findCommentById(const std::string &id) {
+    auto it = std::find_if(comments.begin(), comments.end(),
+                           [&id](std::shared_ptr<Comment> &comment) { return comment->getId() == id; });
+    if (it == comments.end()) {
+        throw std::logic_error("Not found");
+    }
+    return (*it);
+}
+
 std::shared_ptr<User> DB::findUserByCredentials(const Credentials &credentials) {
     auto it = std::find_if(users.begin(), users.end(),
                            [&credentials](std::shared_ptr<User> &user) { return user->checkCredentials(credentials); });
@@ -52,7 +65,7 @@ void DB::updateUser(const std::string &id, const std::function<void(User &)> &tr
     try {
         auto userToUpdate = findUserById(id);
         transformation(*userToUpdate);
-    } catch (const std::exception &ex) {
+    } catch (const std::logic_error &ex) {
         throw ex;
     }
 }
@@ -61,7 +74,16 @@ void DB::updateRecord(const std::string &id, const std::function<void(Record &)>
     try {
         auto recordToUpdate = findRecordById(id);
         transformation(*recordToUpdate);
-    } catch (const std::exception &ex) {
+    } catch (const std::logic_error &ex) {
+        throw ex;
+    }
+}
+
+void DB::updateComment(const std::string &id, const std::function<void(Comment &)> &transformation) {
+    try {
+        auto commentToUpdate = findCommentById(id);
+        transformation(*commentToUpdate);
+    } catch (const std::logic_error &ex) {
         throw ex;
     }
 }
@@ -85,7 +107,18 @@ std::vector<std::shared_ptr<Record>> DB::getRecords(const std::string &id, int s
     try {
         auto user = findUserById(id);
         return user->getRecords(skip, limit);
-    } catch (const std::exception &ex) {
+    } catch (const std::logic_error &ex) {
         throw ex;
     }
 }
+
+std::vector<std::shared_ptr<Comment>> DB::getComments(const std::string &id, int skip, int limit) {
+    try {
+        auto record = findRecordById(id);
+        return record->getComments(skip, limit);
+    } catch (const std::logic_error &ex) {
+        throw ex;
+    }
+}
+
+
