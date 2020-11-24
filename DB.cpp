@@ -8,40 +8,53 @@ void DB::insertUser(std::shared_ptr<User> &user) {
     users.push_back(user);
 }
 
+void DB::insertRecord(std::shared_ptr<Record> &record) {
+    records.push_back(record);
+}
 
 std::shared_ptr<User> DB::findUserByNickname(const std::string &nickname) {
     auto it = std::find_if(users.begin(), users.end(),
                            [&nickname](std::shared_ptr<User> &user) { return user->getNickname() == nickname; });
-    if (it != users.end()) {
-        return (*it);
-    } else {
-        return nullptr;
+    if (it == users.end()) {
+        throw std::logic_error("Not found");
     }
+    return (*it);
 }
 
 std::shared_ptr<User> DB::findUserById(const std::string &id) {
     auto it = std::find_if(users.begin(), users.end(),
                            [&id](std::shared_ptr<User> &user) { return user->getId() == id; });
-    if (it != users.end()) {
-        return (*it);
-    } else {
-        return nullptr;
+    if (it == users.end()) {
+        throw std::logic_error("Not found");
     }
+    return (*it);
+}
+
+std::shared_ptr<Record> DB::findRecordById(const std::string &id) {
+    auto it = std::find_if(records.begin(), records.end(),
+                           [&id](std::shared_ptr<Record> &record) { return record->getId() == id; });
+    if (it == records.end()) {
+        throw std::logic_error("Not found");
+    }
+    return (*it);
 }
 
 std::shared_ptr<User> DB::findUserByCredentials(const Credentials &credentials) {
     auto it = std::find_if(users.begin(), users.end(),
                            [&credentials](std::shared_ptr<User> &user) { return user->checkCredentials(credentials); });
-    if (it != users.end()) {
-        return (*it);
-    } else {
-        return nullptr;
+    if (it == users.end()) {
+        throw std::logic_error("Not found");
     }
+    return (*it);
 }
 
 void DB::updateUser(const std::string &id, const std::function<void(User &)> &transformation) {
-    std::shared_ptr<User> userToUpdate = findUserById(id);
-    transformation(*userToUpdate);
+    try {
+        auto userToUpdate = findUserById(id);
+        transformation(*userToUpdate);
+    } catch (const std::exception &ex) {
+        throw ex;
+    }
 }
 
 void DB::deleteUser(const std::string &id) {
@@ -59,3 +72,11 @@ std::vector<std::shared_ptr<User>> DB::getUsers(int skip, int limit) const {
     return std::vector<std::shared_ptr<User>>(start, end);
 }
 
+std::vector<std::shared_ptr<Record>> DB::getRecords(const std::string &id, int skip, int limit) {
+    try {
+        auto user = findUserById(id);
+        return user->getRecords(skip, limit);
+    } catch (const std::exception &ex) {
+        throw ex;
+    }
+}
