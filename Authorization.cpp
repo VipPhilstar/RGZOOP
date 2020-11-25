@@ -6,7 +6,7 @@
 
 extern DB db;
 
-User * Authorization::getUser() const {
+User *Authorization::getUser() const {
     if (!loggedIn) {
         throw std::logic_error("Not logged in.");
     }
@@ -20,7 +20,11 @@ void Authorization::registration(const Credentials &credentials) {
     try {
         std::shared_ptr<User> existingUser = db.findUserByNickname(credentials.nickname);
         throw std::logic_error("User already exists!");
-    } catch (const std::logic_error &ex) {}
+    } catch (const std::logic_error &ex) {
+        if (ex.what()[0] != 'N') {
+            throw std::logic_error(ex.what());
+        }
+    }
     auto tempUser = std::make_shared<User>(credentials);
     this->user = tempUser;
     this->loggedIn = true;
@@ -41,6 +45,9 @@ void Authorization::login(const Credentials &credentials) {
 }
 
 void Authorization::logout() {
+    if (!loggedIn) {
+        throw std::logic_error("Not logged in.");
+    }
     this->user = nullptr;
     this->loggedIn = false;
 }

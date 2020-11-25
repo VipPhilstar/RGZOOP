@@ -18,5 +18,5 @@ std::ostream &operator<<(std::ostream &os, const Comment &comment) {
 }
 
 Comment::Comment(std::string title) : title(std::move(title)) {
-    this->id = std::to_string(random());
+    this->id = std::to_string(random() % 9000 + 1000);
 }

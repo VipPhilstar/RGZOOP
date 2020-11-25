@@ -51,7 +51,7 @@ User::User(const Credentials &c, std::string interests, std::string mail, std::s
            std::string info) : nickname(c.nickname), password(c.password), interests(std::move(interests)),
                                mail(std::move(mail)),
                                phone(std::move(phone)), birthday(std::move(birthday)), info(std::move(info)) {
-    this->id = std::to_string(random());
+    this->id = std::to_string(random() % 9000 + 1000);
 }
 
 
